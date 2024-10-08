@@ -21,7 +21,7 @@ df = pd.DataFrame(columns=[
 # Function to manually input data using Streamlit widgets
 def input_contact():
     contact = {}
-    contact['Recent Conversion Date'] = st.date_input("Enter Recent Conversion Date", value=datetime.now())
+    contact['Recent Conversion Date'] = st.date_input("Enter Recent Conversion Date (Optional)", value=None)
     contact['Doctor/Facility - UTM medium [Forms] [NEW]'] = st.text_input("Enter UTM medium")
     contact['Doctor/Facility - UTM source [Forms] [NEW]'] = st.text_input("Enter UTM source")
     contact["Doctor/Facility - UTM campaign [Forms]"] = st.text_input("Enter UTM campaign")
