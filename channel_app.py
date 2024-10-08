@@ -144,5 +144,8 @@ def assign_mql_channel(row):
 # Apply the function to the new row
 df[['mql_channel', 'rule_block']] = df.apply(assign_mql_channel, axis=1, result_type='expand')
 
-# Display the final result using Streamlit
-st.write(df)
+# Extract the 'mql_channel' value as a string without index
+channel_result = df['mql_channel'].iloc[-1]  # Get the last row's channel
+
+# Display the result with your custom message
+st.write(f'This MQL is coming from "{channel_result}"')
