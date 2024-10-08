@@ -1,7 +1,11 @@
+import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 
-# Initialize an empty DataFrame with the columns you need
+# Title of the app
+st.title('Which channel is this MQL coming from?')
+
+# Create an empty DataFrame with the required columns
 df = pd.DataFrame(columns=[
     'Recent Conversion Date',
     'Doctor/Facility - UTM medium [Forms] [NEW]',
@@ -14,19 +18,18 @@ df = pd.DataFrame(columns=[
     'Latest Source Drill-Down 1'
 ])
 
-# Function to manually input data for each contact
+# Function to manually input data using Streamlit widgets
 def input_contact():
     contact = {}
-    contact['Recent Conversion Date'] = input("Enter Recent Conversion Date (YYYY-MM-DD) or leave blank: ")
-    contact['Doctor/Facility - UTM medium [Forms] [NEW]'] = input("Enter UTM medium: ")
-    contact['Doctor/Facility - UTM source [Forms] [NEW]'] = input("Enter UTM source: ")
-    contact["Doctor/Facility - UTM campaign [Forms]"] = input("Enter UTM campaign: ")
-    contact['Doctor/Facility - Last Page Seen Freeze when MQL [WF]'] = input("Enter Last Page Seen: ")
-    contact['Doctor/Facility - Source [SO]'] = input("Enter Source [SO]: ")
-    contact['Doctor/Facility - Last source [SO]'] = input("Enter Last Source [SO]: ")
-    contact['Latest Source'] = input("Enter Latest Source: ")
-    contact['Latest Source Drill-Down 1'] = input("Enter Latest Source Drill-Down 1: ")
-
+    contact['Recent Conversion Date'] = st.date_input("Enter Recent Conversion Date", value=datetime.now())
+    contact['Doctor/Facility - UTM medium [Forms] [NEW]'] = st.text_input("Enter UTM medium")
+    contact['Doctor/Facility - UTM source [Forms] [NEW]'] = st.text_input("Enter UTM source")
+    contact["Doctor/Facility - UTM campaign [Forms]"] = st.text_input("Enter UTM campaign")
+    contact['Doctor/Facility - Last Page Seen Freeze when MQL [WF]'] = st.text_input("Enter Last Page Seen")
+    contact['Doctor/Facility - Source [SO]'] = st.text_input("Enter Source [SO]")
+    contact['Doctor/Facility - Last source [SO]'] = st.text_input("Enter Last Source [SO]")
+    contact['Latest Source'] = st.text_input("Enter Latest Source")
+    contact['Latest Source Drill-Down 1'] = st.text_input("Enter Latest Source Drill-Down 1")
     return contact
 
 # Insert contact manually into the dataframe
@@ -150,12 +153,11 @@ def assign_mql_channel(row):
 
     return 'Unknown', 'Unknown'
 
-
 # Apply the function to the new row
 df[['mql_channel', 'rule_block']] = df.apply(assign_mql_channel, axis=1, result_type='expand')
 
-# Get the 'mql_channel' value as a string without dtype and index
-channel_result = df['mql_channel'].to_string(index=False)
+# Get the 'mql_channel' value
+channel_result = df['mql_channel'].iloc[-1]  # Get the last row's channel
 
-# Display the final result with "Channel is:" text
-print(f"\nChannel is: {channel_result.strip()}")
+# Display the result with your custom message
+st.write(f'This MQL is coming from "{channel_result}"')
